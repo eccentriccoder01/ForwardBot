@@ -1,19 +1,20 @@
-# Use Python 3.8 Slim Buster as base image
 FROM python:3.8-slim-buster
 
-# Update system packages and install necessary dependencies
+# Update system and install dependencies
 RUN apt update && apt upgrade -y && apt install -y git
 
-# Copy and install Python dependencies
+# Copy requirements and install dependencies
 COPY requirements.txt /requirements.txt
 RUN pip3 install --upgrade pip && pip3 install -r /requirements.txt
 
 # Set working directory
-WORKDIR /bot
+WORKDIR /Ultra-Forward-Bot
 
-# Copy necessary files
-COPY . /bot
+# Copy all project files
+COPY . .
+
+# Ensure start.sh has execute permissions
 RUN chmod +x start.sh
 
-# Run the startup script
-CMD ["/bin/bash", "/start.sh"]
+# Start the bot
+CMD ["/bin/bash", "./start.sh"]
