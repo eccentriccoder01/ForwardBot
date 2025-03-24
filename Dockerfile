@@ -1,12 +1,19 @@
+# Use Python 3.8 Slim Buster as base image
 FROM python:3.8-slim-buster
 
-RUN apt update && apt upgrade -y
-RUN apt install git -y
-COPY requirements.txt /requirements.txt
+# Update system packages and install necessary dependencies
+RUN apt update && apt upgrade -y && apt install -y git
 
-RUN cd /
-RUN pip3 install -U pip && pip3 install -U -r requirements.txt
-RUN JishuDeveloper /Ultra-Forward-Bot
-WORKDIR /Ultra-Forward-Bot
-COPY start.sh /start.sh
-CMD ["/bin/bash", "/start.sh"] 
+# Copy and install Python dependencies
+COPY requirements.txt /requirements.txt
+RUN pip3 install --upgrade pip && pip3 install -r /requirements.txt
+
+# Set working directory
+WORKDIR /bot
+
+# Copy necessary files
+COPY . /bot
+RUN chmod +x start.sh
+
+# Run the startup script
+CMD ["/bin/bash", "/start.sh"]
